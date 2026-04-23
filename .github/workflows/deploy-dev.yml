@@ -1,12 +1,12 @@
-name: Deploy Prod
+name: Deploy Dev
 
 on:
   push:
-    branches: [main]
+    branches: ['*']
     paths:
-      - 'infrastructure/**'
-      - 'src/**'
-      - '.github/workflows/deploy-prod.yml'
+      - 'workshop/infrastructure/**'
+      - 'workshop/src/**'
+      - '.github/workflows/deploy-dev.yml'
   workflow_dispatch:
 
 permissions:
@@ -15,19 +15,19 @@ permissions:
 
 env:
   AWS_REGION: us-west-2
-  TF_WORKING_DIR: infrastructure
-  STACK_NAME: workshop-prod
+  TF_WORKING_DIR: workshop/infrastructure
+  STACK_NAME: workshop-dev
 
 jobs:
-  deploy-prod:
+  deploy-dev:
     runs-on: ubuntu-latest
-    environment: prod
+    environment: dev
     steps:
       - uses: actions/checkout@v4
 
       - uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::863035634805:role/workshop-prod-github-actions
+          role-to-assume: arn:aws:iam::863035634805:role/workshop-dev-github-actions
           aws-region: ${{ env.AWS_REGION }}
 
       - uses: hashicorp/setup-terraform@v3
