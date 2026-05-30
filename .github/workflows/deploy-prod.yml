@@ -55,6 +55,12 @@ jobs:
         working-directory: infrastructure
         run: terraform init
 
+      - name: Terraform Import Existing Resources
+        working-directory: infrastructure
+        run: |
+          terraform import -var="workshop_stack_base_name=workshop-prod" -var="environment=prod" \
+            aws_dynamodb_table.users_table workshop-prod_users 2>/dev/null || true
+
       - name: Terraform Plan
         working-directory: infrastructure
         run: terraform plan -var="workshop_stack_base_name=workshop-prod" -var="environment=prod" -out=tfplan
